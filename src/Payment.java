@@ -1,7 +1,9 @@
+import java.text.DecimalFormat;
+
 public class Payment {
 
     private String descritpion;
-    private Boolean paid;
+    private boolean paid;
     private double amount;
 
     Payment(String descritpion, double amount) {
@@ -24,5 +26,15 @@ public class Payment {
 
     String getDescritpion() {
         return descritpion;
+    }
+
+    private static DecimalFormat df2 = new DecimalFormat(".##");
+
+    @Override
+    public String toString() {
+        return descritpion +
+                ": £" +
+                df2.format(amount) +
+                (paid ? " (paid)" : " (not paid)");
     }
 }
