@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-// TODO store a list of payments somehow
 // TODO write a toString() method
 
 
@@ -23,23 +20,36 @@ class PaymentSchedule {
     // list of all the dates in the calendar
     private List<Date> dates;
 
+    // a map from payment periods (0,1,2..) to a list of payments for that period.
+    private Map<Integer,List<Payment>> payments;
+
+    // constructor
     PaymentSchedule(Date startDate, int period, int length) {
         this.startDate = startDate;
         this.period = period;
         this.length = length;
 
         dates = new ArrayList<>();
+        payments = new HashMap<>();
+
         for (int i = 0; i < length; i++) {
-            dates.add(new Date(startDate.getTime() + i * period * TimePeriod.dayLength));
+            dates.add(new Date(startDate.getTime()
+                    + i * period * TimePeriod.dayLength));
+            payments.put(i, new ArrayList<>());
         }
     }
 
+    // returns the current payment period's index,
+    // e.g. 0 if we are in the first week.
     int currentPeriod() {
         return (int) Math.floorDiv(
                 new Date().getTime() - startDate.getTime(),
                 TimePeriod.dayLength * period);
     }
 
+    void addPayment(Payment p, Date d) {
+        payments.get(d).add(p);
+    }
 
 
 }
