@@ -63,10 +63,10 @@ class PaymentSchedule {
         payments.get(d).add(p);
     }
 
-    // takes a date and outputs a string detailing the payments that period.
-    String dateToString(Date d) {
-
-    }
+//    // takes a date and outputs a string detailing the payments that period.
+//    String dateToString(Date d) {
+//
+//    }
 
 
 }
