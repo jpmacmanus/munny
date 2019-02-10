@@ -1,3 +1,5 @@
+package munny.model;
+
 class TimePeriod {
 
     // stores some helpful static variables

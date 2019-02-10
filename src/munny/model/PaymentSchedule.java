@@ -1,3 +1,5 @@
+package munny.model;
+
 import java.util.*;
 
 // TODO write a toString() method

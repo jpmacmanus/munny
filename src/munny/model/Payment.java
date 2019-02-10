@@ -1,3 +1,5 @@
+package munny.model;
+
 import java.text.DecimalFormat;
 
 public class Payment {
