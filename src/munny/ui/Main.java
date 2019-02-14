@@ -1,22 +1,41 @@
 package munny.ui;
 
-import munny.model.Payment;
-import munny.model.PaymentSchedule;
-import munny.model.TimePeriod;
-
-import java.util.Date;
+import java.util.Optional;
+import java.util.Scanner;
 
 public class Main {
 
-    // for testing
-
     public static void main(String[] args) {
-        Payment p = new Payment("Rent", 1000.5060);
-        System.out.println(p.toString());
 
-        long l = new Date().getTime() - 13*TimePeriod.dayLength;
-        Date d = new Date(l);
-        PaymentSchedule ps = new PaymentSchedule(d, 7,52);
-        System.out.println("We are currently in period: " + ps.currentPeriod());
+        CommandParser<Integer> pCmd = new CommandParser<>();
+
+        // list commands here
+        pCmd.addCommand("exit", -1);
+        pCmd.addCommand("report",1);
+        pCmd.addCommand("help",2);
+
+        Scanner scanner = new Scanner(System.in);
+
+        // opcode 0 => do nothing
+        int opcode = 0;
+
+        // exits on "exit" command
+        while (opcode != -1) {
+            Optional<Integer> cmd = pCmd.parse(scanner.nextLine());
+
+            if (cmd.isPresent()) {
+                opcode = cmd.get();
+            }
+            else {
+                opcode = 0;
+                System.out.println("Command not recognised: type 'help' for a list of commands"); // TODO
+            }
+
+            // execute command;
+            // TODO create 'CommandExecuter' or something, maybe just a static method
+            System.out.println("Command opcode:" + opcode);
+        }
+
     }
+
 }
