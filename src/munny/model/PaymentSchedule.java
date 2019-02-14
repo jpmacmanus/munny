@@ -4,7 +4,7 @@ import java.util.*;
 
 // TODO write a toString() method
 
-class PaymentSchedule {
+public class PaymentSchedule {
 
     // the first day of the calendar
     // setting this might be hard, parsing dates etc.
@@ -25,7 +25,7 @@ class PaymentSchedule {
     private Map<Integer,List<Payment>> payments;
 
     // constructor
-    PaymentSchedule(Date startDate, int period, int length) {
+    public PaymentSchedule(Date startDate, int period, int length) {
         this.startDate = startDate;
         this.period = period;
         this.length = length;
@@ -48,7 +48,7 @@ class PaymentSchedule {
                 TimePeriod.dayLength * period);
     }
 
-    int currentPeriod() {
+    public int currentPeriod() {
         return getPeriod(new Date());
     }
 

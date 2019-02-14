@@ -12,4 +12,6 @@ This will be a command line application with the ability to store and import a '
 - add periodic payments to a schedule easily, with start dates, end dates and cycle length.
 - update, and delete planned payments.
 - allow each weeks planned budget to be changed individually (but set up a default).
+
 - report a timeline of how over and under budget you have gone through time.
+- Store data with JSON and parse directly into objects via jackson objectmapper

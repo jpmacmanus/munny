@@ -1,11 +1,11 @@
 package munny.model;
 
-class TimePeriod {
+public class TimePeriod {
 
     // stores some helpful static variables
 
     // the length of a day in milliseconds
-    static int dayLength = 86400000;
+    public static int dayLength = 86400000;
 
 
 

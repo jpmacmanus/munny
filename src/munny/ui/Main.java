@@ -1,4 +1,8 @@
-package munny.model;
+package munny.ui;
+
+import munny.model.Payment;
+import munny.model.PaymentSchedule;
+import munny.model.TimePeriod;
 
 import java.util.Date;
 

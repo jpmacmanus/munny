@@ -1,5 +1,7 @@
 package munny.model;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 
@@ -7,6 +9,7 @@ public class MunnyModel extends Observable implements MunnyInterface {
 
     // main model where the majority of work will be done, seperated from IO
     // this will interact with the outside world via observers/spectators
+
 
 
     @Override
@@ -22,5 +25,20 @@ public class MunnyModel extends Observable implements MunnyInterface {
     @Override
     public int periodLength() {
         return 0;
+    }
+
+    @Override
+    public void report() {
+
+    }
+
+    @Override
+    public void schedulePayment(double amount, Date date, String desc) {
+
+    }
+
+    @Override
+    public Collection<Payment> getPayments() {
+        return null;
     }
 }

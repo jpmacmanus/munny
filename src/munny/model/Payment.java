@@ -8,7 +8,7 @@ public class Payment {
     private boolean paid;
     private double amount;
 
-    Payment(String descritpion, double amount) {
+    public Payment(String descritpion, double amount) {
         this.descritpion = descritpion;
         this.amount = amount;
         this.paid = false;
