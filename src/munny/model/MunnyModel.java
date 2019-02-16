@@ -7,7 +7,6 @@ public class MunnyModel extends Observable implements MunnyInterface {
     // main model where the majority of work will be done, seperated from IO
     // this will interact with the outside world via observers/spectators
 
-
     private final int numberOfPeriods;
     private final int periodLength;
     private final Date startDate;
@@ -75,5 +74,19 @@ public class MunnyModel extends Observable implements MunnyInterface {
     public void updatePaymentQueue(Queue<Payment> queue) {
 
     }
+
+    @Override
+    public int currentPeriod() {
+        return getPeriodFromDate(new Date());
+    }
+
+    // returns the specified date's payment period's index,
+    // e.g. 0 if we are in the first week.
+    int getPeriodFromDate(Date d) {
+        return (int) Math.floorDiv(
+                d.getTime() - startDate.getTime(),
+                TimePeriod.dayLength * periodLength);
+    }
+
 
 }

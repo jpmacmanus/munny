@@ -40,35 +40,15 @@ public class PaymentSchedule {
         }
     }
 
-    // returns the specified date's payment period's index,
-    // e.g. 0 if we are in the first week.
-    int getPeriod(Date d) {
-        return (int) Math.floorDiv(
-                d.getTime() - startDate.getTime(),
-                TimePeriod.dayLength * periodLength);
-    }
-
-    public int currentPeriod() {
-        return getPeriod(new Date());
-    }
 
     // takes in a date or period and outputs the payments for that period.
     List<Payment> getPayments(int period) {
         return payments.get(period);
     }
-    List<Payment> getPayments(Date d) {
-        return getPayments(getPeriod(d));
-    }
-
     // adds a payment to the schedule
     void addPayment(Payment p, Date d) {
         payments.get(d).add(p);
     }
-
-//    // takes a date and outputs a string detailing the payments that period.
-//    String dateToString(Date d) {
-//
-//    }
 
 
 }

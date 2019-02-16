@@ -20,8 +20,7 @@ public interface MunnyView {
     // returns the start date of the budget;
     Date getStartDate();
 
-
-
+    int currentPeriod();
 
 
 
