@@ -12,11 +12,11 @@ public class PaymentSchedule {
 
     // the number of budget periods on the schedule
     // e.g. with a period of 7 days, set to 52 for a year.
-    private int length;
+    private int numberOfPeriods;
 
     // the number of days in each payment period (do we budget weekly? monthly?)
     // default to 7, I reckon
-    private int period;
+    private int periodLength;
 
     // list of all the dates in the calendar
     private List<Date> dates;
@@ -25,17 +25,17 @@ public class PaymentSchedule {
     private Map<Integer,List<Payment>> payments;
 
     // constructor
-    public PaymentSchedule(Date startDate, int period, int length) {
+    public PaymentSchedule(Date startDate, int periodLength, int numberOfPeriods) {
         this.startDate = startDate;
-        this.period = period;
-        this.length = length;
+        this.periodLength = periodLength;
+        this.numberOfPeriods = numberOfPeriods;
 
         dates = new ArrayList<>();
         payments = new HashMap<>();
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < numberOfPeriods; i++) {
             dates.add(new Date(startDate.getTime()
-                    + i * period * TimePeriod.dayLength));
+                    + i * periodLength * TimePeriod.dayLength));
             payments.put(i, new ArrayList<>());
         }
     }
@@ -45,7 +45,7 @@ public class PaymentSchedule {
     int getPeriod(Date d) {
         return (int) Math.floorDiv(
                 d.getTime() - startDate.getTime(),
-                TimePeriod.dayLength * period);
+                TimePeriod.dayLength * periodLength);
     }
 
     public int currentPeriod() {

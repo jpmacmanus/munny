@@ -1,5 +1,6 @@
 package munny.model;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MunnyView {
@@ -15,6 +16,9 @@ public interface MunnyView {
 
     // returns the length of a period.
     int periodLength();
+
+    // returns the start date of the budget;
+    Date getStartDate();
 
 
 

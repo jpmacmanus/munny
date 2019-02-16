@@ -3,6 +3,7 @@ package munny.model;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Queue;
 
 public interface MunnyInterface extends MunnyView {
 
@@ -18,10 +19,12 @@ public interface MunnyInterface extends MunnyView {
     // add a payment to the schedule in the model
     void schedulePayment(double amount, Date date, String desc);
 
-    // get the list of payments (so edits can be made?)
-    Collection<Payment> getPayments();
+    // update the main balance
+    // TODO this should really be for a list of accounts
+    void updateBalance(Double balance, int account);
 
-
+    // callback for when the user has sorted out reviewing their payments.
+    void updatePaymentQueue(Queue<Payment> queue);
 
 
 }
