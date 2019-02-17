@@ -14,17 +14,11 @@ public interface MunnyInterface extends MunnyView {
     // called to initiate a report of the current period so far
     // should run through all the currently queued payments and update request to update balances?
     // analogous to startRotate in oop-01.
-    void report();
+    void review();
 
     // add a payment to the schedule in the model
     void schedulePayment(double amount, Date date, String desc);
 
-    // update the main balance
-    // TODO this should really be for a list of accounts
-    void updateBalance(Double balance, int account);
-
-    // callback for when the user has sorted out reviewing their payments.
-    void updatePaymentQueue(Queue<Payment> queue);
-
+    void addAccount(String name, double initialBalance);
 
 }

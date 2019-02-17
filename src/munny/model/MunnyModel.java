@@ -1,8 +1,10 @@
 package munny.model;
 
+import munny.ui.UserInterface;
+
 import java.util.*;
 
-public class MunnyModel extends Observable implements MunnyInterface {
+public class MunnyModel implements MunnyInterface {
 
     // main model where the majority of work will be done, seperated from IO
     // this will interact with the outside world via observers/spectators
@@ -13,25 +15,39 @@ public class MunnyModel extends Observable implements MunnyInterface {
 
     private final PaymentSchedule schedule;
     private final Queue<Payment> paymentQueue;
-    private final List<BankAccount> accounts;
+    private final Queue<BankAccount> accounts;
 
-    public MunnyModel(Date startDate, int numberOfPeriods, int periodLength) {
-        this.startDate = startDate;
+    private final UserInterface user;
+
+    MunnyModel(Date startDate, int numberOfPeriods, int periodLength, UserInterface user) {
+        this.startDate = Objects.requireNonNull(startDate);
         this.numberOfPeriods = numberOfPeriods;
         this.periodLength = periodLength;
+        this.user = Objects.requireNonNull(user);
 
         this.paymentQueue = new LinkedList<>();
         this.schedule = new PaymentSchedule(startDate,periodLength,numberOfPeriods);
-        this.accounts = new ArrayList<>();
+        this.accounts = new LinkedList<>();
     }
 
-    // Todo this needs some testing with callbacks to make sure indices don't change?
-    private Map<String,Integer> accountIndices() {
-        Map<String,Integer> m = new HashMap<>();
-        for (int i = 0; i < accounts.size(); i++) {
-            m.put(accounts.get(i).getName(),i);
+    private void reviewPaymentQueue() {
+        int l = paymentQueue.size();
+        while (l > 0) {
+            Payment p = Objects.requireNonNull(paymentQueue.poll());
+            p.setPaid(user.reviewPayment(p));
+            if (!p.isPaid()) paymentQueue.add(p);
+            l--;
         }
-        return Collections.unmodifiableMap(m);
+    }
+
+    private void reviewBalances() {
+        int l = accounts.size();
+        while (l > 0) {
+            BankAccount a = Objects.requireNonNull(accounts.poll());
+            a.setBalance(user.reviewAccount(a));
+            accounts.add(a);
+            l--;
+        }
     }
 
     @Override
@@ -55,8 +71,11 @@ public class MunnyModel extends Observable implements MunnyInterface {
     }
 
     @Override
-    public void report() {
-
+    public void review() {
+        // should request a review of payments and account balances
+        // view methods handle the rest.
+        reviewPaymentQueue();
+        reviewBalances();
     }
 
     @Override
@@ -66,13 +85,9 @@ public class MunnyModel extends Observable implements MunnyInterface {
     }
 
     @Override
-    public void updateBalance(Double balance, int account) {
-
-    }
-
-    @Override
-    public void updatePaymentQueue(Queue<Payment> queue) {
-
+    public void addAccount(String name, double initialBalance) {
+        BankAccount b = new BankAccount(name, initialBalance);
+        accounts.add(b);
     }
 
     @Override
@@ -82,9 +97,10 @@ public class MunnyModel extends Observable implements MunnyInterface {
 
     // returns the specified date's payment period's index,
     // e.g. 0 if we are in the first week.
-    int getPeriodFromDate(Date d) {
+    private int getPeriodFromDate(Date d) {
+        Date date = Objects.requireNonNull(d);
         return (int) Math.floorDiv(
-                d.getTime() - startDate.getTime(),
+                date.getTime() - startDate.getTime(),
                 TimePeriod.dayLength * periodLength);
     }
 

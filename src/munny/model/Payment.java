@@ -4,39 +4,39 @@ import java.text.DecimalFormat;
 
 public class Payment {
 
-    private String descritpion;
+    private final String descritpion;
+    private final double amount;
     private boolean paid;
-    private double amount;
 
-    public Payment(String descritpion, double amount) {
+    Payment(String descritpion, double amount) {
         this.descritpion = descritpion;
         this.amount = amount;
         this.paid = false;
     }
 
-    void setPaid() {
-        this.paid = true;
+    void setPaid(boolean b) {
+        this.paid = b;
     }
 
-    boolean isPaid() {
+    public boolean isPaid() {
         return this.paid;
     }
 
-    double getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    String getDescritpion() {
+    public String getDescritpion() {
         return descritpion;
     }
 
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
-    @Override
-    public String toString() {
-        return descritpion +
-                ": £" +
-                df2.format(amount) +
-                (paid ? " (paid)" : " (not paid)");
-    }
+//    @Override
+//    public String toString() {
+//        return descritpion +
+//                ": £" +
+//                df2.format(amount) +
+//                (paid ? " (paid)" : " (not paid)");
+//    }
 }

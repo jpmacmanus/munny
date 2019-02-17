@@ -1,30 +1,24 @@
 package munny.ui;
 
-import munny.model.ConcreteMunnyFactory;
-import munny.model.MunnyFactory;
-import munny.model.MunnyInterface;
-import munny.model.Payment;
+import munny.model.*;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandLineInterface implements UserInterface {
 
     private final CommandParser<Integer> parser;
-
+    private final CommandLinePrinter printer;
     private final MunnyFactory factory;
     private MunnyInterface budget;
 
     public CommandLineInterface() {
-
         factory = new ConcreteMunnyFactory();
-
+        printer = new CommandLinePrinter();
         parser = new CommandParser<>();
+
         // list commands here
         parser.addCommand("exit", -1);
-        parser.addCommand("report",1);
+        parser.addCommand("review",1);
         parser.addCommand("help",2);
         parser.addCommand("load",3);
         parser.addCommand("unload",4);
@@ -32,6 +26,7 @@ public class CommandLineInterface implements UserInterface {
     }
 
     public void start() {
+        printer.printWelcome();
         Scanner scanner = new Scanner(System.in);
 
         // opcode 0 => do nothing
@@ -48,9 +43,11 @@ public class CommandLineInterface implements UserInterface {
                 opcode = 0;
                 System.out.println("> Command not recognised: type 'help' for a list of commands");
             }
-            System.out.println(">>> OPCODE: " + opcode);
+            // System.out.println(">>> OPCODE: " + opcode);
             execute(opcode);
         }
+
+        printer.printGoodbye();
     }
 
     // TODO refactor both command parsing and command execution into one big "command handler"
@@ -58,11 +55,10 @@ public class CommandLineInterface implements UserInterface {
     private void execute(int opcode) {
         switch(opcode) {
             case 1 :
-                System.out.println("> report");
-                callReport();
+                callReview();
                 break;
             case 2 :
-                printHelp();
+                printer.printHelp();
                 break;
             case 3 :
                 // TODO via JSON etc
@@ -77,6 +73,7 @@ public class CommandLineInterface implements UserInterface {
     }
 
     private void unload() {
+
         this.budget = null;
     }
 
@@ -84,13 +81,12 @@ public class CommandLineInterface implements UserInterface {
         return budget != null;
     }
 
-    private void callReport() {
+    private void callReview() {
         if (!budgetLoaded()) {
-            // say something
-            System.out.println("\n>>> Error: No budget loaded!\n");
+            printer.printError("No budget currently loaded.");
         }
         else {
-            budget.report();
+            budget.review();
         }
     }
 
@@ -98,26 +94,15 @@ public class CommandLineInterface implements UserInterface {
         budget = factory.createMunnyInstance();
     }
 
-
-    // TODO refactor this so descriptions are added to commands when they're defined and print by looping through.
-    private void printHelp() {
-        System.out.println("Here's a list of possible commands:"); // TODO
-        System.out.println("  - help   : lists possible commands.\n"
-                         + "  - report : generates a report of the current loaded budget.\n"
-                         + "  - init   : initialises a brand new budget, with default the default parameters.\n"
-                         + "              (start date: today, period length: 7 days, number of periods: 52)\n"
-                         + "  - load _ : loads the specified budget [TODO]\n"
-                         + "  - unload : unloads the currently loaded budget.\n"
-        );
+    @Override
+    public double reviewAccount(BankAccount account) {
+        return 0;
     }
 
     @Override
-    public void requestBalance(MunnyInterface m, Map<String, Integer> accounts) {
+    public boolean reviewPayment(Payment payment) {
 
-    }
 
-    @Override
-    public void requestReview(MunnyInterface m, Queue<Payment> payments) {
-
+        return false;
     }
 }
