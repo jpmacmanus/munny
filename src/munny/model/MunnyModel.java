@@ -20,6 +20,8 @@ public class MunnyModel implements MunnyInterface {
     private final UserInterface user;
 
     MunnyModel(Date startDate, int numberOfPeriods, int periodLength, UserInterface user) {
+        // TODO replace date with Calendar, and initialise start time to start at 00.00.00 on the dot.
+
         this.startDate = Objects.requireNonNull(startDate);
         this.numberOfPeriods = numberOfPeriods;
         this.periodLength = periodLength;
@@ -30,6 +32,7 @@ public class MunnyModel implements MunnyInterface {
         this.accounts = new LinkedList<>();
     }
 
+    // similar to reviewBalances but with all current expected payments.
     private void reviewPaymentQueue() {
         int l = paymentQueue.size();
         while (l > 0) {
@@ -40,6 +43,8 @@ public class MunnyModel implements MunnyInterface {
         }
     }
 
+    // loops through account balances and asks the user to update them.
+    // balances are stored in a queue and passed to the user one by one before being added back to the rear.
     private void reviewBalances() {
         int l = accounts.size();
         while (l > 0) {
@@ -49,6 +54,37 @@ public class MunnyModel implements MunnyInterface {
             l--;
         }
     }
+
+    //-------------------
+    // INTERACT METHODS
+    //-------------------
+
+    @Override
+    public void review() {
+        // should request a review of payments and account balances
+        // view methods handle the rest.
+        // TODO check through current period and add payments to queue.
+
+        reviewPaymentQueue();
+        reviewBalances();
+        user.nextTask();
+    }
+
+    @Override
+    public void schedulePayment(double amount, Date date, String desc) {
+        Payment p = new Payment(desc,amount);
+        schedule.addPayment(p,getPeriodFromDate(date));
+    }
+
+    @Override
+    public void addAccount(String name, double initialBalance) {
+        BankAccount b = new BankAccount(name, initialBalance);
+        accounts.add(b);
+    }
+
+    //-----------------
+    // VIEW METHODS
+    //-----------------
 
     @Override
     public List<Payment> getPaymentsFromPeriod(int period) {
@@ -71,26 +107,6 @@ public class MunnyModel implements MunnyInterface {
     }
 
     @Override
-    public void review() {
-        // should request a review of payments and account balances
-        // view methods handle the rest.
-        reviewPaymentQueue();
-        reviewBalances();
-    }
-
-    @Override
-    public void schedulePayment(double amount, Date date, String desc) {
-        Payment p = new Payment(desc,amount);
-        schedule.addPayment(p,date);
-    }
-
-    @Override
-    public void addAccount(String name, double initialBalance) {
-        BankAccount b = new BankAccount(name, initialBalance);
-        accounts.add(b);
-    }
-
-    @Override
     public int currentPeriod() {
         return getPeriodFromDate(new Date());
     }
@@ -99,6 +115,7 @@ public class MunnyModel implements MunnyInterface {
     // e.g. 0 if we are in the first week.
     private int getPeriodFromDate(Date d) {
         Date date = Objects.requireNonNull(d);
+        System.out.println("Current time: "+ date.getTime() + " and startDate time: " + startDate.getTime());
         return (int) Math.floorDiv(
                 date.getTime() - startDate.getTime(),
                 TimePeriod.dayLength * periodLength);

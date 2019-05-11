@@ -25,7 +25,7 @@ public class BankAccount extends Observable {
         return name;
     }
 
-    public void setBalance(double balance) {
+    void setBalance(double balance) {
         this.balance = balance;
     }
 }

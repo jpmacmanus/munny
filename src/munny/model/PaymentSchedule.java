@@ -25,7 +25,7 @@ public class PaymentSchedule {
     private Map<Integer,List<Payment>> payments;
 
     // constructor
-    public PaymentSchedule(Date startDate, int periodLength, int numberOfPeriods) {
+    PaymentSchedule(Date startDate, int periodLength, int numberOfPeriods) {
         this.startDate = startDate;
         this.periodLength = periodLength;
         this.numberOfPeriods = numberOfPeriods;
@@ -46,8 +46,11 @@ public class PaymentSchedule {
         return payments.get(period);
     }
     // adds a payment to the schedule
-    void addPayment(Payment p, Date d) {
-        payments.get(d).add(p);
+    void addPayment(Payment p, int period) throws IllegalArgumentException {
+        if (!payments.containsKey(period)) {
+            throw new IllegalArgumentException("Period " + period + " is out of bounds");
+        }
+        payments.get(period).add(p);
     }
 
 
